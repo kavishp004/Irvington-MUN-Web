@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Irvington Model United Nations — Irvington High School, Fremont CA</title>
+  <meta name="description" content="The Model United Nations program at Irvington High School in Fremont, California. Weekly meetings, travel conferences, and FREMUNC — our own hosted conference.">
+
+  <!-- Social preview. og:url and og:image must be ABSOLUTE urls to work, so
+       replace the TBD host below with the real GitHub Pages address once the
+       repo exists — e.g. https://your-username.github.io/irvington-mun-web -->
+  <link rel="canonical" href="https://TBD.github.io/irvington-mun-web/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Irvington Model United Nations">
+  <meta property="og:title" content="Irvington Model United Nations">
+  <meta property="og:description" content="The Model United Nations program at Irvington High School in Fremont, California. Weekly meetings, travel conferences, and FREMUNC — our own hosted conference.">
+  <meta property="og:url" content="https://TBD.github.io/irvington-mun-web/index.html">
+  <meta property="og:image" content="https://TBD.github.io/irvington-mun-web/assets/team-bearmun.jpg">
+  <meta property="og:image:alt" content="The Irvington delegation on the steps of Sproul Hall at UC Berkeley, holding award certificates and the Best Large Delegation plaque from BearMUN 2025.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Irvington Model United Nations">
+  <meta name="twitter:description" content="The Model United Nations program at Irvington High School in Fremont, California. Weekly meetings, travel conferences, and FREMUNC — our own hosted conference.">
+  <meta name="twitter:image" content="https://TBD.github.io/irvington-mun-web/assets/team-bearmun.jpg">
+  <meta name="theme-color" content="#0A0B0D">
+
+  <!-- Fonts: Instrument Serif (display) + Space Grotesk (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Instrument Serif ships in a single weight, so every display rule sits
+       at 400; asking for 500/600 would only trigger faux-bold synthesis. -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- The hero photograph is the LCP element — fetch it in parallel with the
+       stylesheet rather than waiting for CSS to discover it. -->
+  <link rel="preload" as="image" href="assets/team-bearmun.jpg?v=2" fetchpriority="high">
+
+  <link rel="stylesheet" href="styles.css?v=25">
+
+  <!-- Progressive-enhancement flag, set before paint so `.reveal` elements
+       start hidden without a flash of visible content. -->
+  <script>document.documentElement.classList.add('has-js');</script>
+  <script src="main.js?v=9" defer></script>
+</head>
+
+<!-- data-nav="overlay" lets the hero run underneath a transparent header. -->
+<body data-nav="overlay">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ======================== HEADER ======================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+
+      <a class="brand" href="index.html" aria-label="Irvington Model United Nations — home">
+        <span class="brand__mark">Irvington</span>
+        <span class="brand__rest" aria-hidden="true">Model United Nations</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__link" href="index.html" aria-current="page">Home</a>
+        <a class="nav__link" href="about.html">About</a>
+        <a class="nav__link" href="conferences.html">Conferences</a>
+        <a class="nav__link" href="officers.html">Officer Team</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" type="button"
+              aria-label="Open menu" aria-expanded="false" aria-controls="navOverlay">
+        <span class="nav-toggle__box" aria-hidden="true">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE MENU ==================== -->
+  <div class="nav-overlay" id="navOverlay" inert>
+    <div class="nav-overlay__head"></div>
+    <div class="nav-overlay__body">
+
+      <nav aria-label="Mobile">
+        <ul class="nav-overlay__list">
+          <li><a class="nav-overlay__link" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav-overlay__link" href="about.html">About</a></li>
+          <li><a class="nav-overlay__link" href="conferences.html">Conferences</a></li>
+          <li><a class="nav-overlay__link" href="officers.html">Officer&nbsp;Team</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-overlay__foot">
+        <a class="footer-social" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" focusable="false">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+            <circle cx="12" cy="12" r="4.2"/>
+            <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Instagram</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== MAIN ======================== -->
+  <main id="main">
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         HERO — cinematic intro.
+
+         The entrance sequence is pure CSS; timings live on .hero--intro in
+         styles.css (the --t-* custom properties). Nothing here is driven by
+         JS, so the sequence survives a main.js failure.
+
+         Deliberately NOT using the `reveal` class anywhere in this section:
+         reveal is scroll-triggered and would double up with the load-time
+         animation, leaving elements hidden until a scroll that never comes
+         on a full-viewport hero.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <section class="hero hero--intro has-ribbon" style="--ribbon-top: 62vh; --ribbon-h: 200px;">
+
+      <div class="hero__media">
+        <img class="hero__photo" src="assets/team-bearmun.jpg?v=2" width="2200" height="1650"
+             alt="The Irvington delegation on the steps of Sproul Hall at UC Berkeley, holding award certificates and the Best Large Delegation plaque from BearMUN 2025."
+             fetchpriority="high" decoding="async">
+      </div>
+      <div class="hero__scrim" aria-hidden="true"></div>
+
+      <div class="hero__inner">
+        <div class="container hero__stack">
+
+          <!-- The hero's anchor is the club emblem and the display-sized
+               school/location line, neither of which is the page's name. So
+               the document heading is carried here: announced, not drawn. -->
+          <h1 class="sr-only">Irvington Model United Nations</h1>
+
+          <div class="hero__rule" aria-hidden="true"></div>
+
+          <p class="hero__eyebrow">Irvington High School &middot; Fremont, CA</p>
+
+          <div class="hero__emblem">
+            <img src="assets/imun-logo.png" width="500" height="500"
+                 alt="Irvington Model United Nations club emblem: a Viking in the UN globe-and-laurel."
+                 fetchpriority="high" decoding="async">
+          </div>
+
+          <!-- CERTIFICATE — parked, not deleted. Uncomment to bring it back;
+               its styles and the heroCardIn animation are still in styles.css,
+               and --t-card is still on the timeline. If you do restore it,
+               push --t-emblem / --t-actions / --t-scroll back out (they were
+               pulled ~450ms earlier to close the gap it left).
+          <figure class="award">
+            <p class="award__title">Best Delegate</p>
+            <div class="award__divider"><span>Awarded To</span></div>
+            <p class="award__org">Irvington Model United Nations</p>
+            <figcaption class="award__cite">
+              Awarded for excellence in diplomacy, debate, and resolution
+            </figcaption>
+          </figure>
+          -->
+
+          <p class="hero__subhead">New delegates arrive with no experience and are trained from the ground up.</p>
+
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="about.html">Read More About Model UN</a>
+            <!-- TODO: swap TBD for the real handle. -->
+            <a class="btn btn--ghost" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">Join Our Instagram</a>
+            <a class="btn btn--ghost" href="conferences.html#past">See Our Past Awards</a>
+          </div>
+
+        </div>
+      </div>
+
+      <a class="hero__scroll" href="#after-hero" aria-label="Scroll to content">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </a>
+
+    </section>
+
+    <span id="after-hero"></span>
+
+    <!-- ==================== RECENT HIGHLIGHTS ==================== -->
+    <section class="section">
+      <div class="container">
+
+        <p class="eyebrow eyebrow--ruled reveal">Recent Highlights</p>
+        <h2 class="reveal" data-reveal-delay="80">TBD &mdash; section headline</h2>
+
+        <div class="hl-grid" style="margin-top: var(--space-lg);">
+
+          <article class="hl reveal">
+            <div class="ph"><img src="assets/delegation-campus.jpg" width="2048" height="1536"
+                 alt="Irvington delegates on a shaded campus lawn during a conference trip."
+                 loading="lazy" decoding="async"></div>
+            <p class="hl__meta">TBD<span class="sep" aria-hidden="true">&middot;</span>Conference Recap</p>
+            <h3 class="hl__title">TBD &mdash; lead recap headline goes here</h3>
+          </article>
+
+          <article class="hl reveal" data-reveal-delay="80">
+            <div class="ph"></div>
+            <p class="hl__meta">TBD<span class="sep" aria-hidden="true">&middot;</span>Delegation News</p>
+            <h3 class="hl__title">TBD &mdash; headline</h3>
+          </article>
+
+          <article class="hl reveal" data-reveal-delay="140">
+            <div class="ph"></div>
+            <p class="hl__meta">TBD<span class="sep" aria-hidden="true">&middot;</span>FREMUNC</p>
+            <h3 class="hl__title">TBD &mdash; headline</h3>
+          </article>
+
+          <article class="hl reveal" data-reveal-delay="200">
+            <div class="ph"></div>
+            <p class="hl__meta">TBD<span class="sep" aria-hidden="true">&middot;</span>Announcement</p>
+            <h3 class="hl__title">TBD &mdash; headline</h3>
+          </article>
+
+          <article class="hl reveal" data-reveal-delay="260">
+            <div class="ph"></div>
+            <p class="hl__meta">TBD<span class="sep" aria-hidden="true">&middot;</span>Conference Recap</p>
+            <h3 class="hl__title">TBD &mdash; headline</h3>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== JOIN CTA ==================== -->
+    <section class="cta has-ribbon has-ribbon--light"
+             style="--ribbon-top: 0; --ribbon-h: 150px;">
+      <div class="container cta__inner">
+        <p class="cta__eyebrow reveal">Join Us</p>
+        <h2 class="cta__title reveal" data-reveal-delay="80">Every delegate started with one committee session.</h2>
+        <p class="cta__body reveal" data-reveal-delay="140">No experience needed and no tryout &mdash; come to a meeting and we will get you started. We meet Mondays at lunch; the travel team meets Mondays after school.</p>
+        <a class="btn btn--primary btn--onaccent reveal" data-reveal-delay="200" href="mailto:mun.irvington@gmail.com?subject=Joining%20Irvington%20MUN">Join the Club</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <div class="footer-rule" aria-hidden="true"></div>
+          <p class="footer-brand">Irvington Model<br>United Nations</p>
+          <p class="footer-tagline">TBD — one-line tagline for the club.</p>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Quick Links</h2>
+          <ul class="footer-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="conferences.html">Conferences</a></li>
+            <li><a href="officers.html">Officer Team</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Contact</h2>
+          <ul class="footer-list">
+            <li>
+              <span class="footer-list__label">Email</span>
+              <a href="mailto:mun.irvington@gmail.com">mun.irvington@gmail.com</a>
+            </li>
+            <li>
+              <span class="footer-list__label">Club Meetings</span>
+              <span>Mondays at lunch &mdash; room 223</span>
+            </li>
+            <li>
+              <span class="footer-list__label">Travel Team</span>
+              <span>Mondays after school &mdash; room 223</span>
+            </li>
+            <li>
+              <span class="footer-list__label">Advisor</span>
+              <span>Mr.&nbsp;Belmonte</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Follow</h2>
+          <a class="footer-social" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">
+            <svg class="footer-social__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+              <circle cx="12" cy="12" r="4.2"/>
+              <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom__inner">
+        <p>&copy; <span id="year">2026</span> Irvington Model United Nations. All rights reserved.</p>
+        <p>Irvington High School &middot; Fremont, CA</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

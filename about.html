@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Irvington Model United Nations</title>
+  <meta name="description" content="What Model United Nations is, what the Irvington club does week to week, who can join, and what delegates take away from it.">
+
+  <!-- Social preview. og:url and og:image must be ABSOLUTE urls to work, so
+       replace the TBD host below with the real GitHub Pages address once the
+       repo exists — e.g. https://your-username.github.io/irvington-mun-web -->
+  <link rel="canonical" href="https://TBD.github.io/irvington-mun-web/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Irvington Model United Nations">
+  <meta property="og:title" content="About Us — Irvington Model UN">
+  <meta property="og:description" content="What Model United Nations is, what the Irvington club does week to week, who can join, and what delegates take away from it.">
+  <meta property="og:url" content="https://TBD.github.io/irvington-mun-web/about.html">
+  <meta property="og:image" content="https://TBD.github.io/irvington-mun-web/assets/team-bearmun.jpg">
+  <meta property="og:image:alt" content="The Irvington delegation on the steps of Sproul Hall at UC Berkeley, holding award certificates and the Best Large Delegation plaque from BearMUN 2025.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About Us — Irvington Model UN">
+  <meta name="twitter:description" content="What Model United Nations is, what the Irvington club does week to week, who can join, and what delegates take away from it.">
+  <meta name="twitter:image" content="https://TBD.github.io/irvington-mun-web/assets/team-bearmun.jpg">
+  <meta name="theme-color" content="#0A0B0D">
+
+  <!-- Fonts: Instrument Serif (display) + Space Grotesk (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Instrument Serif ships in a single weight, so every display rule sits
+       at 400; asking for 500/600 would only trigger faux-bold synthesis. -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css?v=25">
+
+  <!-- Progressive-enhancement flag, set before paint so `.reveal` elements
+       start hidden without a flash of visible content. -->
+  <script>document.documentElement.classList.add('has-js');</script>
+  <script src="main.js?v=9" defer></script>
+</head>
+
+<!-- The banner is a full-bleed dark band, so the header floats over it. -->
+<body data-nav="overlay">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ======================== HEADER ======================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+
+      <a class="brand" href="index.html" aria-label="Irvington Model United Nations — home">
+        <span class="brand__mark">Irvington</span>
+        <span class="brand__rest" aria-hidden="true">Model United Nations</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="about.html" aria-current="page">About</a>
+        <a class="nav__link" href="conferences.html">Conferences</a>
+        <a class="nav__link" href="officers.html">Officer Team</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" type="button"
+              aria-label="Open menu" aria-expanded="false" aria-controls="navOverlay">
+        <span class="nav-toggle__box" aria-hidden="true">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE MENU ==================== -->
+  <div class="nav-overlay" id="navOverlay" inert>
+    <div class="nav-overlay__head"></div>
+    <div class="nav-overlay__body">
+
+      <nav aria-label="Mobile">
+        <ul class="nav-overlay__list">
+          <li><a class="nav-overlay__link" href="index.html">Home</a></li>
+          <li><a class="nav-overlay__link" href="about.html" aria-current="page">About</a></li>
+          <li><a class="nav-overlay__link" href="conferences.html">Conferences</a></li>
+          <li><a class="nav-overlay__link" href="officers.html">Officer&nbsp;Team</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-overlay__foot">
+        <a class="footer-social" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" focusable="false">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+            <circle cx="12" cy="12" r="4.2"/>
+            <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Instagram</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== MAIN ======================== -->
+  <main id="main">
+
+    <!-- ==================== PAGE BANNER ====================
+         Drifting position papers over a deep blue wash. Every layer is
+         decorative, so the whole assembly is aria-hidden and the heading
+         below it carries the page on its own.
+
+         The sheets are SVG (crisp rules, cheap to draw); the single turning
+         sheet is HTML, because rotateY on an SVG element is not reliable
+         across browsers. Styles live under "20d." in styles.css. -->
+    <section class="banner banner--photo" style="--banner-focus: center 60%; --banner-scrim: 0.80;">
+
+      <div class="banner__media">
+        <img src="assets/delegation-awards.jpg" width="2200" height="1650"
+             alt="The Irvington delegation gathered outside the venue after a conference, several delegates holding award certificates and gavels."
+             fetchpriority="high" decoding="async">
+      </div>
+
+      <div class="banner__veil" aria-hidden="true"></div>
+
+      <div class="banner__inner">
+        <div class="container">
+          <div class="banner__rule" aria-hidden="true"></div>
+          <p class="eyebrow banner__eyebrow">Who We Are &middot; Irvington Model United Nations</p>
+          <h1 class="banner__title"><span class="word">About</span> <span class="word">Us</span></h1>
+          <p class="lede banner__lede">What Model UN is, what we do week to week, and what a delegate takes away from it.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== 2. ABOUT ====================
+         Copy left on near-black; the photo panel at right hangs past the
+         section's bottom edge into the lighter stats band below. -->
+    <section class="about" id="about">
+      <div class="container about__inner">
+
+        <div class="about__copy">
+                    <h2 class="reveal" data-reveal-delay="80">About Irvington Model UN</h2>
+<p class="reveal" data-reveal-delay="140">Model United Nations is a simulation of how countries actually negotiate. Each delegate is assigned a country, rarely their own, and represents its real positions in a committee: researching what that government has said and done, speaking in formal debate, forming blocs with delegations that share its interests, and drafting resolutions that can survive a vote.</p>
+          <p class="reveal" data-reveal-delay="200">We meet every Monday at lunch in room 223, and the travel team meets Mondays after school. Meetings cover parliamentary procedure, including motions, points, and speakers&rsquo; lists, along with research methods and how to write a position paper. We run practice debates through the year, and delegates travel to TBD conferences per year at other high schools and universities.</p>
+          <p class="reveal" data-reveal-delay="260">The club is open to all four grades. No experience is required, and there is no tryout; most members join knowing nothing about the UN. Our advisor is Mr.&nbsp;Belmonte, dues are TBD, and the club has been running since TBD.</p>
+          <p class="reveal" data-reveal-delay="320">What delegates take away travels well: speaking to a room without hiding behind notes, finding a credible source quickly and using it, holding an argument together while it is being challenged, and knowing how to work a room to find the few people who will work with you. The friendships made across schools tend to outlast the conferences themselves.</p>
+        </div>
+
+        <div class="about__media reveal" data-reveal-delay="160">
+          <!-- Swap in a delegation photo when one is available; the box is
+               already reserved so replacing it cannot shift the page. -->
+          <div class="ph">
+            <img src="assets/team-bearmun.jpg?v=2" width="2200" height="1650"
+                 alt="The Irvington delegation on the steps of Sproul Hall at UC Berkeley, holding award certificates and the Best Large Delegation plaque from BearMUN 2025."
+                 loading="lazy" decoding="async">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== 3. BY THE NUMBERS ====================
+         Rendered from SITE_DATA.stats at the top of main.js and counted up on
+         first scroll into view. Values are null there, so this reads TBD
+         until real figures are filled in. -->
+    <section class="stats">
+      <div class="container">
+        <p class="eyebrow eyebrow--ruled reveal">By the Numbers</p>
+        <div class="stat-row reveal" data-reveal-delay="80" id="statRow"></div>
+      </div>
+    </section>
+
+
+    <!-- ==================== 1. FEATURE CARDS ====================
+         Pulled up over the hero's bottom edge by --hero-overlap (80px on
+         desktop, 0 below 900px where they stack). Real links, because they
+         lift and glow on hover. -->
+    <section class="features">
+      <div class="container feature-grid">
+
+        <a class="feature reveal" href="#about">
+          <span class="feature__icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Weekly Meetings">
+  <rect x="4" y="6" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="4" y1="10" x2="20" y2="10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="8.5" y1="4" x2="8.5" y2="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="15.5" y1="4" x2="15.5" y2="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="12" cy="15" r="1.15" fill="currentColor" stroke="none"/>
+</svg></span>
+          <h2 class="feature__title">Weekly Meetings</h2>
+          <p class="feature__body">Training on procedure, research workshops and practice debate. Mondays at lunch; travel team Mondays after school.</p>
+        </a>
+
+        <a class="feature reveal" data-reveal-delay="90" href="conferences.html">
+          <span class="feature__icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Travel Conferences">
+  <circle cx="12" cy="14.8" r="5.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="6.7" y1="14.8" x2="17.3" y2="14.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="12" cy="14.8" rx="2.2" ry="5.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M4 11.6 Q9.8 4.2 19.2 5.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17.55 3.75 L19.2 5.6 L17.05 6.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          <h2 class="feature__title">Travel Conferences</h2>
+          <p class="feature__body">We compete at conferences across the Bay Area and beyond. TBD &mdash; how many we attend each year.</p>
+        </a>
+
+        <a class="feature reveal" data-reveal-delay="180" href="conferences.html">
+          <span class="feature__icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="FREMUNC">
+  <circle cx="12" cy="5.9" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9 12.5 A3.05 3.05 0 0 1 15 12.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="4.5" y1="12.5" x2="19.5" y2="12.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M7.6 12.5 L8.8 20 L15.2 20 L16.4 12.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+          <h2 class="feature__title">FREMUNC</h2>
+          <p class="feature__body">Our own conference, staffed and chaired by Irvington delegates. TBD &mdash; dates and registration.</p>
+        </a>
+
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <div class="footer-rule" aria-hidden="true"></div>
+          <p class="footer-brand">Irvington Model<br>United Nations</p>
+          <p class="footer-tagline">TBD — one-line tagline for the club.</p>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Quick Links</h2>
+          <ul class="footer-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="conferences.html">Conferences</a></li>
+            <li><a href="officers.html">Officer Team</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Contact</h2>
+          <ul class="footer-list">
+            <li>
+              <span class="footer-list__label">Email</span>
+              <a href="mailto:mun.irvington@gmail.com">mun.irvington@gmail.com</a>
+            </li>
+            <li>
+              <span class="footer-list__label">Club Meetings</span>
+              <span>Mondays at lunch &mdash; room 223</span>
+            </li>
+            <li>
+              <span class="footer-list__label">Travel Team</span>
+              <span>Mondays after school &mdash; room 223</span>
+            </li>
+            <li>
+              <span class="footer-list__label">Advisor</span>
+              <span>Mr.&nbsp;Belmonte</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Follow</h2>
+          <a class="footer-social" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">
+            <svg class="footer-social__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+              <circle cx="12" cy="12" r="4.2"/>
+              <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom__inner">
+        <p>&copy; <span id="year">2026</span> Irvington Model United Nations. All rights reserved.</p>
+        <p>Irvington High School &middot; Fremont, CA</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

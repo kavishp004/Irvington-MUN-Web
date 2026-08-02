@@ -1,0 +1,2525 @@
+/* ============================================================================
+   IRVINGTON MODEL UNITED NATIONS
+   styles.css — shared shell: tokens, base, header, nav, footer, utilities.
+
+   Organization
+     01. Design tokens
+     02. Reset & base
+     03. Typography
+     04. Layout: container, sections, full-bleed
+     05. Ribbon motif
+     06. Links & buttons
+     07. Skip link
+     08. Site header / desktop nav
+     09. Mobile overlay menu
+     10. Site footer
+     11. Reveal utility
+     12. Image placeholder
+     13. Feature cards
+     14. About split
+     15. Stats
+     16. Highlights grid
+     17. Join CTA
+     18. Conferences banner
+     19. Timeline
+     20. Past conferences
+     20b. Officers
+     20c. Page transition
+     21. Reduced motion
+   ========================================================================= */
+
+
+/* ============================================================================
+   01. DESIGN TOKENS
+   ========================================================================= */
+
+:root {
+  /* --- Surfaces ------------------------------------------------------- */
+  --c-bg:            #0A0B0D;  /* page background, near-black */
+  --c-surface:       #14161A;  /* raised panels, footer, cards */
+  --c-surface-2:     #1B1E24;  /* hover state on surfaces */
+
+  /* --- Text ----------------------------------------------------------- */
+  --c-text:          #F5F6F8;  /* primary */
+  --c-muted:         #9BA1AC;  /* secondary — 7.6:1 on --c-bg, passes AA */
+
+  /* --- Accent --------------------------------------------------------- */
+  /* --c-accent is the brand blue. At 4.37:1 on near-black it clears the 3:1
+     bar for graphics/UI (ribbons, rules, underlines, borders, button fills)
+     but sits just under the 4.5:1 needed for body-size text. --c-accent-text
+     is the lightened variant used wherever accent color carries actual words
+     (5.5:1). Keep that split — it is the only reason inline links pass AA. */
+  --c-accent:        #2D6BFF;
+  --c-accent-text:   #4D80FF;
+  --c-accent-dim:    rgba(45, 107, 255, 0.14);
+
+  /* --- Lines ---------------------------------------------------------- */
+  --c-line:          rgba(245, 246, 248, 0.10);
+  --c-line-strong:   rgba(245, 246, 248, 0.20);
+
+  /* --- Type families -------------------------------------------------- */
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Helvetica, Arial, sans-serif;
+
+  /* --- Type scale (fluid) --------------------------------------------- */
+  --fs-eyebrow:  0.75rem;                        /* 12px, letterspaced caps */
+  --fs-small:    0.9375rem;                      /* 15px */
+  --fs-body:     1.0625rem;                      /* 17px */
+  --fs-lede:     clamp(1.125rem, 1.6vw, 1.375rem);
+  --fs-h3:       clamp(1.375rem, 2.2vw, 1.875rem);
+  --fs-h2:       clamp(2rem, 4vw, 3rem);
+  --fs-h1:       clamp(2.5rem, 6.5vw, 4.5rem);
+  --fs-display:  clamp(3rem, 9vw, 6.5rem);
+
+  /* --- Spacing scale (8px rhythm) ------------------------------------- */
+  --space-3xs: 0.25rem;   /*  4px */
+  --space-2xs: 0.5rem;    /*  8px */
+  --space-xs:  0.75rem;   /* 12px */
+  --space-sm:  1rem;      /* 16px */
+  --space-md:  1.5rem;    /* 24px */
+  --space-lg:  2.5rem;    /* 40px */
+  --space-xl:  4rem;      /* 64px */
+  --space-2xl: 6rem;      /* 96px */
+  --space-3xl: 8.5rem;    /* 136px */
+
+  /* --- Layout --------------------------------------------------------- */
+  --max-width:    1280px;
+  --gutter:       clamp(1.25rem, 5vw, 3rem);
+  --header-h:     4.75rem;   /* 76px */
+
+  /* How far the feature cards ride up over the bottom of the hero. Drives
+     three things at once: the cards' negative margin, the hero's bottom
+     padding, and the scroll cue's offset — so the cue is never buried under
+     the cards. Zero on small screens, where the cards stack and the hero is
+     already fighting for vertical room. */
+  --hero-overlap: 0px;
+
+  /* --- Motion --------------------------------------------------------- */
+  --ease-out:   cubic-bezier(0.16, 1, 0.30, 1);   /* expo-ish, for entrances */
+  --dur-fast:   160ms;
+  --dur-base:   240ms;
+  --dur-slow:   520ms;
+
+  /* --- Elevation ------------------------------------------------------ */
+  /* The header sits ABOVE the overlay on purpose: the hamburger morphs into
+     the menu's close button, so it has to stay clickable while open. */
+  --z-menu:    150;
+  --z-header:  200;
+  --z-skip:    300;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-h: 4rem;   /* 64px */
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --hero-overlap: 80px;
+  }
+}
+
+
+/* ============================================================================
+   02. RESET & BASE
+   ========================================================================= */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Kills the 300ms tap delay without disabling pinch-zoom. */
+  touch-action: manipulation;
+  overflow-x: hidden;
+}
+
+/* Locked while the mobile overlay menu is open. */
+body.is-menu-open {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+svg { display: block; max-width: 100%; }
+
+img { height: auto; }
+
+button,
+input,
+select,
+textarea { font: inherit; color: inherit; }
+
+/* Pages WITHOUT a full-bleed hero: push content clear of the fixed header.
+   Pages WITH one opt in via <body data-nav="overlay"> so the hero can run
+   underneath the transparent bar. */
+main { display: block; }
+
+body:not([data-nav="overlay"]) main {
+  padding-top: var(--header-h);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-accent-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Only suppress the default ring where :focus-visible is supported. */
+:focus:not(:focus-visible) { outline: none; }
+
+::selection {
+  background: var(--c-accent);
+  color: #FFFFFF;
+}
+
+
+/* ============================================================================
+   03. TYPOGRAPHY
+   ========================================================================= */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-md);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); line-height: 1.2; }
+
+p {
+  margin: 0 0 var(--space-md);
+  max-width: 68ch;   /* keeps measure in the readable 60–75ch band */
+  text-wrap: pretty;
+}
+
+/* Oversized editorial headline, for hero use. */
+.display {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* Thin uppercase letterspaced label. The recurring editorial "tag" style. */
+.eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin: 0 0 var(--space-sm);
+}
+
+.eyebrow--accent { color: var(--c-accent-text); }
+
+/* Eyebrow with a short blue rule leading into it. */
+.eyebrow--ruled {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.eyebrow--ruled::before {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: var(--c-accent);
+  flex: none;
+}
+
+/* Standfirst / intro paragraph. */
+.lede {
+  font-size: var(--fs-lede);
+  line-height: 1.55;
+  color: var(--c-muted);
+  max-width: 60ch;
+}
+
+.muted { color: var(--c-muted); }
+
+/* Visually hidden, still announced. Used for the home page's document
+   heading: that hero is carried entirely by a graphic certificate, so there
+   is no visible text that honestly functions as the page's <h1>. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ============================================================================
+   04. LAYOUT
+   ========================================================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Standard vertical section rhythm. */
+.section {
+  position: relative;
+  padding-block: var(--space-2xl);
+}
+
+.section--tight { padding-block: var(--space-xl); }
+.section--tall  { padding-block: var(--space-3xl); }
+
+/* Full-bleed band: breaks the container to span the viewport, keeps its own
+   inner content aligned to the same grid. */
+.section--bleed {
+  width: 100%;
+  background: var(--c-surface);
+}
+
+.section--bleed-dark { background: var(--c-bg); }
+
+/* Hairline separator between stacked sections. */
+.section--ruled { border-top: 1px solid var(--c-line); }
+
+
+/* --- Hero band -------------------------------------------------------
+   The surface the transparent header sits over. Pair with
+   <body data-nav="overlay">. Content inside is placeholder for now. */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 100vh;
+  min-height: 100svh;   /* avoids the mobile URL-bar jump */
+  padding-block: var(--space-3xl) var(--space-2xl);
+  overflow: hidden;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+/* Guarantees headline contrast regardless of what the photo is doing. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10, 11, 13, 0.78) 0%,
+      rgba(10, 11, 13, 0.42) 32%,
+      rgba(10, 11, 13, 0.86) 78%,
+      var(--c-bg) 100%
+    ),
+    rgba(10, 11, 13, 0.30);
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* --- Interior page head ----------------------------------------------- */
+
+.page-head {
+  padding-block: var(--space-2xl) var(--space-xl);
+  border-bottom: 1px solid var(--c-line);
+}
+
+
+/* ============================================================================
+   04b. HERO — CINEMATIC INTRO  (index.html)
+
+   A one-shot entrance sequence, ~3.5s end to end. The whole timeline is driven
+   by the custom properties below: every element's animation-delay reads from
+   one of them, so retiming the sequence means editing this block and nothing
+   else.
+
+     0.05s  photo fades up from black, Ken Burns begins
+     0.90s  blue rule draws outward from centre
+     1.30s  eyebrow fades up
+     1.60s  certificate scales in from 0.94, blur to sharp
+     2.05s  emblem strokes draw themselves on
+     2.60s  subhead + buttons fade up
+     3.00s  scroll cue appears, then loops
+
+   Only opacity / transform / filter are animated, so nothing here can trigger
+   layout and nothing here can shift the page. Reduced-motion overrides live at
+   the end of this block and land every element on its final state.
+   ========================================================================= */
+
+.hero--intro {
+  --t-photo:   0.05s;
+  --t-rule:    0.90s;
+  --t-eyebrow: 1.30s;
+  --t-card:    1.60s;   /* certificate parked; kept so restoring is one edit */
+  --t-emblem:  1.60s;
+  --t-actions: 2.15s;
+  --t-scroll:  2.55s;
+
+  /* Vertical rhythm for this section is viewport-height-aware, not fixed.
+     A full-viewport hero carrying a rule, eyebrow, emblem, certificate,
+     subhead, two buttons and a scroll cue does not fit inside 100vh on a
+     phone at the standard --space-* scale: measured at 529x714 the stack ran
+     899px tall and pushed the scroll cue off-screen entirely. Each gap below
+     is a clamp whose middle term is a vh fraction, so the whole sequence
+     breathes on tall screens and compresses on short ones instead of
+     overflowing. Tune the vh terms, not the min/max, to reflow the hero. */
+  --gap-eyebrow: clamp(0.75rem, 2.2vh, 1.5rem);
+  --gap-emblem:  clamp(0.85rem,  3.1vh, 4rem);
+  --gap-card:    clamp(0.75rem, 2.0vh, 1.5rem);
+  --gap-subhead: clamp(0.9rem,   2.6vh, 4rem);
+  --gap-actions: clamp(0.9rem,   2.2vh, 2.5rem);
+
+  align-items: center;
+  text-align: center;
+  padding-block:
+    calc(var(--header-h) + clamp(1rem, 4vh, 4rem))
+    calc(clamp(3.75rem, 7.5vh, 6rem) + var(--hero-overlap));
+  background: var(--c-bg);   /* the black the photo fades up from */
+}
+
+/* --- Layer 1: the photograph ------------------------------------------ */
+
+.hero--intro .hero__media { overflow: hidden; }
+
+.hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 52%;   /* favours the delegation over the facade */
+  opacity: 0;
+  transform-origin: center 45%;
+  /* Two animations, two different properties — they compose rather than
+     fight. Fade is one-shot; Ken Burns runs forever, alternating so it
+     breathes in and out instead of snapping back to 1.0. */
+  animation:
+    heroPhotoIn 1.2s ease-out var(--t-photo) both,
+    heroKenBurns 20s ease-in-out var(--t-photo) infinite alternate;
+}
+
+@keyframes heroPhotoIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes heroKenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+
+/* --- Layer 2: the veil ------------------------------------------------
+   Two stacked passes: a radial vignette, then a bottom-anchored ramp to solid
+   page black so the hero dissolves into whatever follows it.
+
+   The vignette is deliberately heavy even at its centre. The photograph in
+   assets/ is bright daylight — pale stucco and open sky — so a conventional
+   light vignette left the eyebrow at about 3.1:1 against the sky, under the
+   4.5:1 floor. Holding roughly 0.45 alpha across the middle and ramping to
+   0.88 at the edges puts white text near 7.5:1 while still reading as a
+   photograph rather than a grey wash. If a darker photo is swapped in, these
+   centre stops are the first thing to relax. */
+
+.hero--intro .hero__scrim {
+  background:
+    radial-gradient(
+      ellipse 118% 88% at 50% 46%,
+      rgba(10, 11, 13, 0.16) 0%,
+      rgba(10, 11, 13, 0.38) 55%,
+      rgba(10, 11, 13, 0.72) 100%
+    ),
+    linear-gradient(
+      to top,
+      var(--c-bg) 0%,
+      rgba(10, 11, 13, 0.90) 10%,
+      rgba(10, 11, 13, 0.62) 34%,
+      rgba(10, 11, 13, 0.30) 62%,
+      transparent 100%
+    );
+}
+
+/* --- Layer 3: the content stack ---------------------------------------- */
+
+.hero__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 2. the rule, drawn outward from the centre */
+.hero__rule {
+  width: min(320px, 60%);
+  height: 1px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: heroRule 0.6s var(--ease-out) var(--t-rule) both;
+}
+
+@keyframes heroRule {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* 3. the eyebrow */
+.hero__eyebrow {
+  margin: var(--gap-eyebrow) 0 0;
+  /* Scaled well past the --fs-eyebrow label size: with the certificate parked
+     this line is the hero's only visual anchor, so it carries the weight a
+     headline normally would. Tracking comes DOWN as the size goes up — 0.28em
+     is right for a 12px label and far too airy at 34px. */
+  font-size: clamp(1.0625rem, 3.4vw, 2.125rem);
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--c-text);
+  text-shadow: 0 1px 16px rgba(10, 11, 13, 0.95), 0 0 38px rgba(10, 11, 13, 0.75);
+  animation: heroFadeUp 0.65s var(--ease-out) var(--t-eyebrow) both;
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 5. the emblem — sits above the certificate, draws on after it */
+/* The club emblem — a raster logo now, not drawn line art, so it fades and
+   scales in rather than stroke-drawing. The glow keeps it from sitting flat
+   on the photograph. */
+.hero__emblem {
+  width: clamp(96px, 13vw, 152px);
+  margin-top: var(--gap-emblem);
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55))
+          drop-shadow(0 0 30px rgba(45, 107, 255, 0.40));
+  animation: heroEmblemIn 0.9s var(--ease-out) var(--t-emblem) both;
+}
+
+.hero__emblem img { width: 100%; height: auto; }
+
+@keyframes heroEmblemIn {
+  from { opacity: 0; transform: scale(0.90); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* pathLength="1" on every stroke means one dash length fits all, regardless
+   of each path's real geometry — no getTotalLength(), no JS, no per-path
+   magic numbers. */
+.emblem__ln {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: emblemDraw 0.9s var(--ease-out) var(--t-emblem) both;
+}
+
+/* The opacity step is load-bearing, not decoration. stroke-linecap:round
+   paints a visible round dot at a path's start point even when the dash is
+   fully offset, so all twelve strokes would sit on screen as a constellation
+   of blue specks throughout the stagger delay. Holding opacity:0 until 1%
+   suppresses that without affecting the drawn result. */
+@keyframes emblemDraw {
+  0%   { stroke-dashoffset: 1; opacity: 0; }
+  1%   { stroke-dashoffset: 1; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+/* The two branches climb out of the shared base first and take longer, being
+   roughly 2.6x the length of a leaf; the leaves then unfurl in mirrored pairs
+   from the base of each branch to the tip. Last stroke lands at ~3.5s, which
+   closes the sequence. */
+.emblem__ln--branch { animation-duration: 1.05s; }
+.emblem__ln--leaf   { animation-duration: 0.55s; }
+
+.emblem__ln:nth-child(1)  { animation-delay: calc(var(--t-emblem) + 0.00s); }
+.emblem__ln:nth-child(2)  { animation-delay: calc(var(--t-emblem) + 0.06s); }
+.emblem__ln:nth-child(3)  { animation-delay: calc(var(--t-emblem) + 0.45s); }
+.emblem__ln:nth-child(4)  { animation-delay: calc(var(--t-emblem) + 0.48s); }
+.emblem__ln:nth-child(5)  { animation-delay: calc(var(--t-emblem) + 0.56s); }
+.emblem__ln:nth-child(6)  { animation-delay: calc(var(--t-emblem) + 0.59s); }
+.emblem__ln:nth-child(7)  { animation-delay: calc(var(--t-emblem) + 0.67s); }
+.emblem__ln:nth-child(8)  { animation-delay: calc(var(--t-emblem) + 0.70s); }
+.emblem__ln:nth-child(9)  { animation-delay: calc(var(--t-emblem) + 0.78s); }
+.emblem__ln:nth-child(10) { animation-delay: calc(var(--t-emblem) + 0.81s); }
+.emblem__ln:nth-child(11) { animation-delay: calc(var(--t-emblem) + 0.89s); }
+.emblem__ln:nth-child(12) { animation-delay: calc(var(--t-emblem) + 0.92s); }
+
+/* --- 4. the certificate ------------------------------------------------ */
+
+.award {
+  position: relative;
+  width: min(560px, 100%);
+  margin-top: var(--gap-card);
+  padding: clamp(1.1rem, 3.2vh, 2.75rem) clamp(1.5rem, 5vw, 3.25rem);
+  border: 1px solid rgba(10, 11, 13, 0.20);
+  border-radius: 2px;
+  /* Paper: a warm off-white wash, plus two near-invisible repeating gradients
+     that read as fibre when they interfere. No texture image needed. */
+  background-image:
+    repeating-linear-gradient(0deg,  rgba(10, 11, 13, 0.014) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(10, 11, 13, 0.014) 0 1px, transparent 1px 4px),
+    linear-gradient(158deg, #FCFBF7 0%, #F4F2EA 55%, #EDEAE0 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 70px rgba(45, 107, 255, 0.32),      /* the blue glow */
+    0 30px 70px rgba(0, 0, 0, 0.60);
+  opacity: 0;
+  animation: heroCardIn 0.9s var(--ease-out) var(--t-card) both;
+}
+
+/* the inner keyline — the second half of the double border */
+.award::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(10, 11, 13, 0.20);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+@keyframes heroCardIn {
+  from { opacity: 0; transform: scale(0.94); filter: blur(10px); }
+  to   { opacity: 1; transform: scale(1);    filter: blur(0);   }
+}
+
+.award__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 5.2vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #101217;
+}
+
+/* the small-caps divider: a rule either side of a letterspaced label */
+.award__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block: clamp(0.6rem, 1.7vh, 1.5rem);
+  /* 4.93:1 on the paper. The obvious lighter grey (#6A7180) measured 4.37:1 —
+     fine for a large label, under the bar for 11px letterspaced caps. */
+  color: #626976;
+}
+
+.award__divider::before,
+.award__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(10, 11, 13, 0.18);
+}
+
+.award__divider span {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.award__org {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(0.8125rem, 2.1vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  color: #1B1F27;
+}
+
+.award__cite {
+  margin: clamp(0.5rem, 1.3vh, 1rem) auto 0;
+  max-width: 34ch;
+  font-size: var(--fs-small);
+  font-style: italic;
+  line-height: 1.55;
+  color: #555C68;        /* 6.0:1 on the paper */
+}
+
+/* --- 6. subhead + actions --------------------------------------------- */
+
+.hero__subhead {
+  margin: var(--gap-subhead) auto 0;
+  max-width: 46ch;
+  font-size: var(--fs-lede);
+  line-height: 1.55;
+  /* Full-strength text, not --c-muted. The delegates in the photograph are
+     holding white award certificates, which are by far the brightest thing in
+     the frame — and they sit exactly where this paragraph lands. Muted grey
+     measured 2.07:1 against them. */
+  color: var(--c-text);
+  text-shadow: 0 1px 16px rgba(10, 11, 13, 0.95), 0 0 34px rgba(10, 11, 13, 0.7);
+  animation: heroFadeUp 0.7s var(--ease-out) var(--t-actions) both;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--gap-actions);
+  animation: heroFadeUp 0.7s var(--ease-out) calc(var(--t-actions) + 0.12s) both;
+}
+
+/* --- 7. the scroll cue ------------------------------------------------- */
+
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--hero-overlap) + var(--space-md));
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  color: var(--c-muted);
+  text-decoration: none;
+  animation: heroFadeUp 0.5s var(--ease-out) var(--t-scroll) both;
+  transition: color var(--dur-fast) ease;
+}
+
+.hero__scroll:hover { color: var(--c-text); }
+
+.hero__scroll svg {
+  width: 22px;
+  height: 22px;
+  animation: heroChevron 2.2s ease-in-out calc(var(--t-scroll) + 0.5s) infinite;
+}
+
+@keyframes heroChevron {
+  0%, 22%, 100% { transform: translateY(0); }
+  11%           { transform: translateY(5px); }
+}
+
+/* --- Mobile ------------------------------------------------------------ */
+
+/* On a phone the headline and lede occupy nearly the full width, so a scrim
+   that releases at 78% leaves their right-hand ends sitting on open
+   photograph — the About lede measured 3.97:1 there. Narrow screens keep the
+   scrim across the whole band; the picture is mostly backdrop at that size
+   anyway, and legibility wins. */
+@media (max-width: 640px) {
+  .banner--photo .banner__inner::before {
+    background: linear-gradient(90deg,
+      rgba(10, 11, 13, var(--s)) 0%,
+      rgba(10, 11, 13, calc(var(--s) * 0.94)) 55%,
+      rgba(10, 11, 13, calc(var(--s) * 0.74)) 80%,
+      rgba(10, 11, 13, calc(var(--s) * 0.52)) 100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero--intro {
+    /* Cue sits closer to the edge on a phone, so it needs less clearance. */
+    padding-bottom: clamp(3.25rem, 6.5vh, 6rem);
+  }
+
+  .award {
+    width: 100%;
+    padding-inline: var(--space-md);
+  }
+
+  .award::before { inset: 7px; }
+
+  /* Two lines on a phone is intended here, not a defect — the line is now
+     display-sized, and text-wrap:balance splits it evenly. */
+  .hero__eyebrow { letter-spacing: 0.1em; }
+
+  /* Scales with the viewport rather than locking to a fixed size — the old
+     48px here was sized for the small drawn laurel and shrank the club
+     emblem to a sixth of its intended area. */
+  .hero__emblem {
+    width: clamp(76px, 21vw, 104px);
+  }
+
+  .hero__subhead { font-size: 1rem; }
+
+  .hero__scroll { bottom: calc(var(--hero-overlap) + var(--space-2xs)); }
+
+  /* Stack the buttons and let each own the full width. */
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: min(320px, 100%);
+    margin-inline: auto;
+  }
+}
+
+/* Short landscape viewports: the sequence still has to fit without the
+   certificate colliding with the scroll cue. */
+@media (max-height: 700px) and (min-width: 641px) {
+  .hero__emblem   { margin-top: var(--space-md); }
+  .hero__subhead  { margin-top: var(--space-md); }
+  .award          { padding-block: var(--space-md); }
+}
+
+/* --- Reduced motion ----------------------------------------------------
+   Every element lands on its finished state with no movement at all: no
+   fade, no Ken Burns, no draw-on, no bounce. Set explicitly rather than
+   relying on the global near-zero-duration override, so the outcome is
+   unambiguous. */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__photo {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero__rule {
+    animation: none;
+    transform: scaleX(1);
+  }
+
+  .hero__eyebrow,
+  .hero__subhead,
+  .hero__actions,
+  .hero__scroll {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .award {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .hero__emblem {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .emblem__ln {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .hero__scroll svg { animation: none; }
+
+  /* No page wipe: navigation is instant rather than animated. */
+  .page-wipe { display: none; }
+
+
+  /* Interior banner photographs hold still. */
+  .banner__media img {
+    animation: none;
+    transform: none;
+  }
+
+  .banner__rule { animation: none; transform: scaleX(1); }
+
+  .banner__title .word,
+  .banner__eyebrow,
+  .banner__lede {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The timeline fill still tracks scroll — it is a position indicator, not
+     decoration — but it stops easing toward each new value. */
+  .timeline__fill {
+    transition: none;
+    will-change: auto;
+  }
+}
+
+
+/* ============================================================================
+   05. RIBBON MOTIF
+   Thin vertical blue banner that bleeds off the right edge of a section.
+   Usage:  <section class="section has-ribbon"> … </section>
+   Tune per-instance with --ribbon-top / --ribbon-h / --ribbon-w.
+   ========================================================================= */
+
+.has-ribbon { position: relative; }
+
+.has-ribbon::after {
+  content: "";
+  position: absolute;
+  top: var(--ribbon-top, 0);
+  right: 0;
+  width: var(--ribbon-w, 10px);
+  height: var(--ribbon-h, 190px);
+  background: linear-gradient(
+    180deg,
+    var(--c-accent) 0%,
+    var(--c-accent) 55%,
+    rgba(45, 107, 255, 0.15) 100%
+  );
+  /* Notched tail — reads as a hanging banner rather than a plain bar. */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 16px), 0 100%);
+  pointer-events: none;
+}
+
+/* Mirror to the left edge. */
+.has-ribbon--left::after {
+  right: auto;
+  left: 0;
+}
+
+/* Standalone ribbon, when a pseudo-element is not enough (e.g. you need it
+   inside a specific grid cell). */
+.ribbon {
+  width: var(--ribbon-w, 10px);
+  height: var(--ribbon-h, 190px);
+  background: linear-gradient(
+    180deg,
+    var(--c-accent) 0%,
+    var(--c-accent) 55%,
+    rgba(45, 107, 255, 0.15) 100%
+  );
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 16px), 0 100%);
+  flex: none;
+}
+
+@media (max-width: 768px) {
+  .has-ribbon::after,
+  .ribbon {
+    --ribbon-w: 6px;
+    --ribbon-h: 120px;
+  }
+}
+
+
+/* ============================================================================
+   06. LINKS & BUTTONS
+   ========================================================================= */
+
+a { color: var(--c-accent-text); }
+
+/* Inline prose link: blue, with an underline that thickens on hover. */
+.link {
+  color: var(--c-accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: rgba(77, 128, 255, 0.45);
+  transition: text-decoration-color var(--dur-fast) ease;
+}
+
+.link:hover { text-decoration-color: var(--c-accent-text); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  min-height: 44px;              /* touch target floor */
+  padding: 0.7rem 1.4rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              color var(--dur-fast) ease;
+}
+
+.btn--primary {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: #FFFFFF;               /* 4.5:1 on the accent fill */
+}
+
+.btn--primary:hover { background: #1D57E6; border-color: #1D57E6; }
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--c-line-strong);
+  color: var(--c-text);
+}
+
+.btn--ghost:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent-text);
+}
+
+.btn__icon { width: 18px; height: 18px; flex: none; }
+
+
+/* ============================================================================
+   07. SKIP LINK
+   ========================================================================= */
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2xs);
+  left: var(--space-2xs);
+  z-index: var(--z-skip);
+  padding: 0.7rem 1.1rem;
+  background: var(--c-accent);
+  color: #FFFFFF;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 2px;
+  transform: translateY(calc(-100% - var(--space-sm)));
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+
+/* ============================================================================
+   08. SITE HEADER / DESKTOP NAV
+   Transparent over the hero, then a blurred dark bar once .is-scrolled is
+   applied by main.js past 80px.
+   ========================================================================= */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color var(--dur-base) ease,
+              border-color var(--dur-base) ease,
+              backdrop-filter var(--dur-base) ease;
+}
+
+.site-header.is-scrolled {
+  background: rgba(10, 11, 13, 0.72);
+  border-bottom-color: var(--c-line);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* No blur support (or blur disabled): fall back to an opaque bar so the
+   wordmark never sits on top of moving content at low contrast. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header.is-scrolled { background: rgba(10, 11, 13, 0.96); }
+}
+
+/* Pages without an overlay hero start in the solid state — there is no hero
+   image for a transparent bar to sit on. */
+body:not([data-nav="overlay"]) .site-header {
+  background: rgba(10, 11, 13, 0.72);
+  border-bottom-color: var(--c-line);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+/* --- Wordmark --------------------------------------------------------- */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-text);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--dur-fast) ease;
+}
+
+.brand:hover { color: var(--c-accent-text); }
+
+.brand__mark { font-weight: 600; }
+
+/* Accent blue, not muted grey — and --c-accent-text rather than the brand
+   --c-accent, because at 12px this is small text and needs 4.5:1 (5.48 vs
+   4.37). "Irvington" stays white so the two halves stay distinct. */
+.brand__rest {
+  color: var(--c-accent-text);
+  margin-left: 0.42em;
+  transition: color var(--dur-fast) ease;
+}
+
+.brand:hover .brand__rest { color: #7FA6FF; }
+
+/* The full lockup now shows at every width — no "MUN" abbreviation — so the
+   type has to shrink to survive a 375px header alongside the hamburger.
+   Measured: at 12px/0.16em the wordmark alone needs ~282px of the ~295px
+   available there, which is not a margin worth trusting. */
+@media (max-width: 720px) {
+  .brand {
+    font-size: 0.6875rem;
+    letter-spacing: 0.11em;
+  }
+}
+
+@media (max-width: 430px) {
+  .brand {
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+  }
+  .brand__rest { margin-left: 0.32em; }
+}
+
+/* --- Desktop nav ------------------------------------------------------ */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--fs-small);
+  font-weight: 400;
+  color: var(--c-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) ease;
+}
+
+.nav__link:hover { color: var(--c-text); }
+
+/* Blue underline: drawn for the active page, and on hover as a preview. */
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.55rem;
+  height: 2px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.nav__link:hover::after { transform: scaleX(1); }
+
+.nav__link[aria-current="page"] {
+  color: var(--c-text);
+  font-weight: 500;
+}
+
+.nav__link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* --- Hamburger -------------------------------------------------------- */
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -0.5rem;   /* optical alignment to the gutter */
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--c-text);
+}
+
+.nav-toggle__box {
+  position: relative;
+  width: 22px;
+  height: 14px;
+}
+
+.nav-toggle__bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity var(--dur-fast) ease;
+}
+
+.nav-toggle__bar:nth-child(1) { top: 0; }
+.nav-toggle__bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.nav-toggle__bar:nth-child(3) { bottom: 0; }
+
+/* Morph to an X while the overlay is open. */
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) {
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+@media (max-width: 860px) {
+  .nav        { display: none; }
+  .nav-toggle { display: inline-flex; }
+}
+
+
+/* ============================================================================
+   09. MOBILE OVERLAY MENU
+   ========================================================================= */
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-base) var(--ease-out),
+              visibility 0s linear var(--dur-base);
+}
+
+.nav-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-base) var(--ease-out),
+              visibility 0s;
+}
+
+/* Spacer matching the header so the close button lines up with the burger. */
+.nav-overlay__head {
+  height: var(--header-h);
+  flex: none;
+}
+
+/* While the panel is open the header must not paint its blurred bar on top
+   of it — only the wordmark and the close button should read. */
+body.is-menu-open .site-header,
+body.is-menu-open .site-header.is-scrolled {
+  background: transparent;
+  border-bottom-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.nav-overlay__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-inline: var(--gutter);
+  padding-bottom: var(--space-2xl);
+}
+
+.nav-overlay__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nav-overlay__link {
+  display: inline-block;
+  padding-block: var(--space-2xs);
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 11vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: color var(--dur-fast) ease,
+              opacity var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-out);
+}
+
+.nav-overlay.is-open .nav-overlay__link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered entrance, 60ms apart. */
+.nav-overlay.is-open li:nth-child(1) .nav-overlay__link { transition-delay: 80ms; }
+.nav-overlay.is-open li:nth-child(2) .nav-overlay__link { transition-delay: 140ms; }
+.nav-overlay.is-open li:nth-child(3) .nav-overlay__link { transition-delay: 200ms; }
+
+.nav-overlay__link:hover { color: var(--c-accent-text); }
+
+.nav-overlay__link[aria-current="page"] {
+  color: var(--c-text);
+  text-decoration: underline;
+  text-decoration-color: var(--c-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+.nav-overlay__foot {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--c-line);
+}
+
+
+/* ============================================================================
+   10. SITE FOOTER
+   ========================================================================= */
+
+.site-footer {
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+  margin-top: auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.2fr 1fr;
+  gap: var(--space-xl) var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-xl);
+}
+
+.footer-col__title {
+  font-family: var(--font-body);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin: 0 0 var(--space-md);
+}
+
+/* Column 1 — club name + tagline */
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--c-text);
+  margin: 0 0 var(--space-sm);
+}
+
+.footer-tagline {
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+  max-width: 32ch;
+  margin: 0;
+}
+
+/* Short blue rule under the club name — echoes the ribbon motif. */
+.footer-rule {
+  width: 2.5rem;
+  height: 2px;
+  background: var(--c-accent);
+  margin-bottom: var(--space-md);
+}
+
+.footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.footer-list a,
+.footer-list > li > span {
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+  text-decoration: none;
+}
+
+/* Links carry a full 44px target height; the plain text items beside them
+   do not need one, so they only get enough padding to keep the rhythm. */
+.footer-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  transition: color var(--dur-fast) ease;
+}
+
+.footer-list > li > span {
+  display: inline-block;
+  padding-block: 0.55rem;
+}
+
+.footer-list a:hover { color: var(--c-accent-text); }
+
+.footer-list > li > span.footer-list__label {
+  display: block;
+  font-size: 0.8125rem;
+  color: rgba(155, 161, 172, 0.75);
+  padding-block: 0;              /* label sits tight above its value */
+  margin-bottom: -0.35rem;
+}
+
+/* Column 4 — follow */
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 44px;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: 2px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) ease,
+              background-color var(--dur-fast) ease,
+              color var(--dur-fast) ease;
+}
+
+.footer-social:hover {
+  border-color: var(--c-accent);
+  background: var(--c-accent-dim);
+  color: var(--c-text);
+}
+
+.footer-social__icon { width: 18px; height: 18px; flex: none; }
+
+/* Bottom bar */
+.footer-bottom {
+  border-top: 1px solid var(--c-line);
+}
+
+.footer-bottom__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-block: var(--space-md);
+  font-size: 0.8125rem;
+  color: var(--c-muted);
+}
+
+.footer-bottom__inner p { margin: 0; max-width: none; }
+
+@media (max-width: 1023px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    padding-block: var(--space-xl) var(--space-lg);
+  }
+}
+
+
+/* ============================================================================
+   11. REVEAL UTILITY
+   Elements with .reveal fade up 24px on entering the viewport. The hidden
+   start state is scoped to .has-js so content stays visible if JS fails.
+   Optional per-element stagger: data-reveal-delay="120"  (milliseconds)
+   ========================================================================= */
+
+.has-js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.has-js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+
+/* ============================================================================
+   12. IMAGE PLACEHOLDER
+   Stands in for photography that does not exist yet. aspect-ratio reserves the
+   box so dropping a real <img> in later cannot shift the page.
+   ========================================================================= */
+
+.ph {
+  position: relative;
+  aspect-ratio: var(--ph-ratio, 16 / 10);
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  border-radius: 2px;
+  background-image:
+    repeating-linear-gradient(135deg,
+      rgba(45, 107, 255, 0.055) 0 12px, transparent 12px 24px),
+    linear-gradient(158deg, #1C2028 0%, #14161A 55%, #0E1014 100%);
+}
+
+/* A faint corner tick, so an empty box still looks composed rather than broken. */
+.ph::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 22px;
+  height: 22px;
+  border-right: 1px solid rgba(245, 246, 248, 0.16);
+  border-bottom: 1px solid rgba(245, 246, 248, 0.16);
+}
+
+.ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* ============================================================================
+   13. FEATURE CARDS
+   Ride up over the bottom edge of the hero by --hero-overlap so they break the
+   section boundary. z-index puts them above the hero's own layers.
+   ========================================================================= */
+
+.features {
+  position: relative;
+  z-index: 5;
+  margin-top: calc(-1 * var(--hero-overlap));
+  padding-bottom: var(--space-2xl);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+/* Real links, not decorated <div>s. A card that lifts and glows on hover is
+   promising a destination, so it has to have one. */
+.feature {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 3px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) ease,
+    background-color var(--dur-base) ease,
+    box-shadow var(--dur-base) ease;
+}
+
+.feature:hover,
+.feature:focus-visible {
+  transform: translateY(-6px);
+  border-color: var(--c-accent);
+  background: var(--c-surface-2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45),
+              0 0 0 1px rgba(45, 107, 255, 0.25);
+}
+
+.feature__icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: var(--space-md);
+  color: var(--c-muted);
+  transition: color var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
+}
+
+.feature:hover .feature__icon,
+.feature:focus-visible .feature__icon {
+  color: var(--c-accent-text);
+  transform: translateY(-2px);
+}
+
+.feature__icon svg { width: 100%; height: 100%; }
+
+.feature__title {
+  margin: 0 0 var(--space-2xs);
+  font-family: var(--font-display);
+  font-size: 1.3125rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--c-text);
+}
+
+.feature__body {
+  margin: 0;
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--c-muted);
+  max-width: 34ch;
+}
+
+@media (max-width: 900px) {
+  .features { padding-top: var(--space-2xl); }
+  .feature-grid { grid-template-columns: 1fr; gap: var(--space-sm); }
+}
+
+
+/* ============================================================================
+   14. ABOUT — SPLIT SECTION
+   Copy on near-black at left; the photo panel at right hangs past the section's
+   bottom edge into the lighter band below, so it reads as pinned across the
+   colour change rather than sitting inside one band.
+   ========================================================================= */
+
+.about {
+  position: relative;
+  background: var(--c-bg);
+  padding-block: var(--space-2xl);
+}
+
+.about__inner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.about__copy p {
+  color: var(--c-muted);
+  max-width: 54ch;
+}
+
+.about__copy p:last-child { margin-bottom: 0; }
+
+.about__media {
+  position: relative;
+  z-index: 2;
+  --ph-ratio: 4 / 5;
+  /* The overhang. Bottom is larger than top so the panel clearly crosses the
+     boundary below rather than looking merely off-centre. */
+  margin-top: calc(-1 * var(--space-lg));
+  margin-bottom: calc(-1 * var(--space-2xl) - var(--space-md));
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 900px) {
+  .about__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  /* Stacked, the overhang has nothing to cross — it would just collide with
+     the stats below. */
+  .about__media {
+    margin-top: 0;
+    margin-bottom: 0;
+    --ph-ratio: 3 / 2;
+  }
+}
+
+
+/* ============================================================================
+   15. BY THE NUMBERS
+   Lighter band, so the About photo above has something to overlap onto.
+   ========================================================================= */
+
+.stats {
+  position: relative;
+  background: var(--c-surface);
+  border-block: 1px solid var(--c-line);
+  padding-block: var(--space-2xl);
+}
+
+/* Extra head room on desktop for the photo hanging down from the About band. */
+@media (min-width: 901px) {
+  .stats { padding-top: calc(var(--space-2xl) + var(--space-lg)); }
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg) var(--space-md);
+}
+
+.stat {
+  text-align: center;
+  border-left: 1px solid var(--c-line);
+  padding-inline: var(--space-sm);
+}
+
+.stat:first-child { border-left: 0; }
+
+.stat__value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+  /* Tabular figures: without these the glyph widths change every frame of the
+     count-up and the number visibly jitters. */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.stat__suffix { color: var(--c-accent-text); }
+
+.stat__label {
+  display: block;
+  margin-top: var(--space-xs);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+@media (max-width: 780px) {
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(odd) { border-left: 0; }
+}
+
+
+/* ============================================================================
+   16. RECENT HIGHLIGHTS — asymmetric grid
+   Six-column track: one wide lead card, then four half-width cards.
+   ========================================================================= */
+
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-md);
+}
+
+.hl { grid-column: span 2; }
+
+/* The lead story runs double width and gets a wider crop. */
+.hl:first-child {
+  grid-column: span 4;
+  --ph-ratio: 16 / 9;
+}
+
+.hl {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hl .ph {
+  transition: border-color var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
+}
+
+/* Scoped to the anchor form on purpose. The highlight cards ship as static
+   <article>s because the recap pages do not exist yet, and a card that lifts
+   under the cursor is claiming to be clickable. Wrap one in <a class="hl">
+   when its recap is written and the hover state turns itself on. */
+a.hl:hover .ph,
+a.hl:focus-visible .ph {
+  border-color: var(--c-accent);
+  transform: translateY(-4px);
+}
+
+.hl__meta {
+  margin: var(--space-sm) 0 var(--space-2xs);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.hl__meta .sep { color: var(--c-accent-text); margin-inline: 0.4em; }
+
+.hl__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--c-text);
+  transition: color var(--dur-fast) ease;
+}
+
+.hl:first-child .hl__title { font-size: clamp(1.375rem, 2.4vw, 2rem); }
+
+a.hl:hover .hl__title,
+a.hl:focus-visible .hl__title { color: var(--c-accent-text); }
+
+@media (max-width: 1000px) {
+  .hl-grid { grid-template-columns: repeat(4, 1fr); }
+  .hl, .hl:first-child { grid-column: span 2; }
+  .hl:first-child { --ph-ratio: 16 / 10; }
+}
+
+@media (max-width: 640px) {
+  .hl-grid { grid-template-columns: 1fr; }
+  .hl, .hl:first-child { grid-column: span 1; }
+}
+
+
+/* ============================================================================
+   17. JOIN CTA — full-bleed blue band
+   ========================================================================= */
+
+.cta {
+  position: relative;
+  background: var(--c-accent);
+  color: #FFFFFF;
+  padding-block: var(--space-2xl);
+  overflow: hidden;
+}
+
+.cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cta__eyebrow {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.cta__title {
+  margin: 0 0 var(--space-md);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  max-width: 18ch;
+}
+
+.cta__body {
+  margin: 0 0 var(--space-lg);
+  max-width: 52ch;
+  color: rgba(255, 255, 255, 0.90);
+}
+
+/* On the blue band the button inverts: white fill, blue label. */
+.btn--onaccent {
+  background: #FFFFFF;
+  border-color: #FFFFFF;
+  color: #1B4FD8;
+}
+
+.btn--onaccent:hover {
+  background: #F2F5FF;
+  border-color: #F2F5FF;
+  color: #17429F;
+}
+
+/* The ribbon is blue by default and would vanish here. */
+.has-ribbon--light::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.92) 55%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+}
+
+
+/* ============================================================================
+   18. CONFERENCES — PAGE BANNER
+   Shorter than the home hero, with its own idiom: a dot-matrix world map that
+   breathes rather than a photographic entrance.
+   ========================================================================= */
+
+.banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 55vh;
+  min-height: 55svh;
+  padding-block: calc(var(--header-h) + var(--space-xl)) var(--space-xl);
+  background: var(--c-bg);
+  overflow: hidden;
+}
+
+/* The photograph layer. Every interior banner uses this now — one treatment
+   across Conferences, Officers and About, matching the home hero, so the four
+   pages read as one site rather than four experiments. */
+.banner__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Per-page crop, set inline on each banner. */
+  object-position: var(--banner-focus, center 45%);
+  /* A far slower drift than the hero's: these bands are half the height and
+     sit above dense text, so the motion has to stay near-subliminal. */
+  animation: bannerDrift 34s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* On a photograph, --c-muted needs the scrim almost opaque to clear 4.5:1,
+   which kills the picture. Full-strength text clears it with roughly half the
+   scrim, so photo banners promote the eyebrow and lede to --c-text. */
+.banner--photo .lede { max-width: 52ch; }
+
+.banner--photo .eyebrow,
+.banner--photo .lede {
+  color: var(--c-text);
+  text-shadow: 0 1px 14px rgba(10, 11, 13, 0.9), 0 0 30px rgba(10, 11, 13, 0.65);
+}
+
+.banner--photo h1 {
+  text-shadow: 0 2px 18px rgba(10, 11, 13, 0.85), 0 0 40px rgba(10, 11, 13, 0.6);
+}
+
+@keyframes bannerDrift {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+/* Keeps the headline legible over the densest part of the map. */
+/* Text sits at the left, so the scrim is heaviest there and opens up to the
+   right where the photograph can breathe. The vertical pass seats the band
+   into the page above and below. */
+.banner__veil {
+  position: absolute;
+  inset: 0;
+  /* These two layers COMPOSITE, they do not average: stacked alphas combine
+     as 1-(1-a)(1-b). An earlier pass used 0.88 over 0.70, which multiplies to
+     96% black and buried a bright daylight photograph entirely. The values
+     below are chosen so the busiest corner lands near 0.82 — enough for white
+     text on a sunlit lawn — while the right side stays open around 0.15. */
+  background:
+    linear-gradient(100deg,
+      rgba(10, 11, 13, 0.80) 0%,
+      rgba(10, 11, 13, 0.62) 42%,
+      rgba(10, 11, 13, 0.24) 74%,
+      rgba(10, 11, 13, 0.12) 100%),
+    linear-gradient(to bottom,
+      rgba(10, 11, 13, 0.40) 0%,
+      rgba(10, 11, 13, 0.08) 26%,
+      rgba(10, 11, 13, 0.20) 68%,
+      var(--c-bg) 100%);
+  pointer-events: none;
+}
+
+.banner__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* A scrim tied to the TEXT rather than the whole frame. Widening the global
+   veil enough to tame sunlit grass behind the headline would have dimmed the
+   delegates too; this darkens only the column the type occupies and releases
+   by ~62% across, so the subject of the photograph stays lit. */
+.banner--photo .banner__inner::before {
+  content: "";
+  position: absolute;
+  inset: -12% 0;
+  /* Strength is per-page via --banner-scrim, because how dark this needs to be
+     depends entirely on the photograph underneath. A night shot needs very
+     little; the overcast one on this About page has a pale metal roof and bare
+     concrete right where the eyebrow sits, and measured 2.9:1 at the default. */
+  --s: var(--banner-scrim, 0.58);
+  background: linear-gradient(90deg,
+    rgba(10, 11, 13, var(--s)) 0%,
+    rgba(10, 11, 13, calc(var(--s) * 0.88)) 28%,
+    rgba(10, 11, 13, calc(var(--s) * 0.54)) 48%,
+    rgba(10, 11, 13, calc(var(--s) * 0.22)) 66%,
+    transparent 78%);
+  pointer-events: none;
+}
+
+/* ============================================================================
+   19. TIMELINE — upcoming conferences
+   A rail down the left whose blue fill tracks scroll progress through the list.
+   ========================================================================= */
+
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 clamp(2rem, 5vw, 3.25rem);
+}
+
+/* The unfilled rail. */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--c-line-strong);
+}
+
+/* The filled portion. Height is written by main.js as a percentage. */
+.timeline__fill {
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  width: 2px;
+  height: 0;
+  background: var(--c-accent);
+  box-shadow: 0 0 12px rgba(45, 107, 255, 0.55);
+  will-change: height;
+}
+
+.tl-item {
+  position: relative;
+  padding-bottom: var(--space-xl);
+}
+
+.tl-item:last-child { padding-bottom: 0; }
+
+/* The node. */
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * clamp(2rem, 5vw, 3.25rem) + 1px);
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c-bg);
+  border: 2px solid var(--c-line-strong);
+  transition: border-color var(--dur-base) ease, background-color var(--dur-base) ease;
+}
+
+.tl-item.is-reached::before {
+  border-color: var(--c-accent);
+  background: var(--c-accent);
+  box-shadow: 0 0 12px rgba(45, 107, 255, 0.6);
+}
+
+.tl-item__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-2xs);
+}
+
+.tl-item__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  color: var(--c-text);
+}
+
+.tl-item__when {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.tl-item__when .sep { color: var(--c-accent-text); margin-inline: 0.5em; }
+
+.tl-item__committees {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.tl-item__committees li {
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--c-line);
+  border-radius: 2px;
+  font-size: 0.8125rem;
+  color: var(--c-muted);
+  background: var(--c-surface);
+}
+
+
+/* --- Status chips ------------------------------------------------------
+   Status is carried by the LABEL; colour only reinforces it. Never let the
+   colour be the only signal. */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid;
+  border-radius: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.chip--registered {
+  color: #6FE3A5;
+  border-color: rgba(111, 227, 165, 0.38);
+  background: rgba(111, 227, 165, 0.10);
+}
+
+.chip--open {
+  color: #7FA6FF;
+  border-color: rgba(127, 166, 255, 0.40);
+  background: rgba(127, 166, 255, 0.10);
+}
+
+.chip--tbd {
+  color: #A9B0BC;
+  border-color: var(--c-line-strong);
+  background: rgba(245, 246, 248, 0.05);
+}
+
+
+/* ============================================================================
+   20. PAST CONFERENCES — filter + grid
+   ========================================================================= */
+
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-lg);
+}
+
+.filter__btn {
+  min-height: 44px;
+  padding: 0.5rem 1.1rem;
+  background: transparent;
+  border: 1px solid var(--c-line-strong);
+  border-radius: 2px;
+  color: var(--c-muted);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              background-color var(--dur-fast) ease;
+}
+
+.filter__btn:hover {
+  color: var(--c-text);
+  border-color: var(--c-line-strong);
+}
+
+.filter__btn[aria-pressed="true"] {
+  color: var(--c-text);
+  border-color: var(--c-accent);
+  background: var(--c-accent-dim);
+}
+
+.conf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-md);
+}
+
+.conf-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
+}
+
+.conf-card:hover {
+  border-color: var(--c-accent);
+  transform: translateY(-4px);
+}
+
+.conf-card .ph {
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.conf-card__body { padding: var(--space-md); }
+
+.conf-card__year {
+  display: block;
+  margin-bottom: var(--space-3xs);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-accent-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.conf-card__name {
+  margin: 0 0 var(--space-xs);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--c-text);
+}
+
+.conf-card__awards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.conf-card__awards li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+.conf-card__awards li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--c-accent);
+  transform: rotate(45deg);
+}
+
+.conf-card__awards li.is-none::before { display: none; }
+
+.conf-card__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: var(--space-sm);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: 2px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) ease,
+              background-color var(--dur-fast) ease;
+}
+
+.conf-card__link:hover {
+  border-color: var(--c-accent);
+  background: var(--c-accent-dim);
+}
+.conf-card__awards li.is-none { padding-left: 0; font-style: italic; opacity: 0.75; }
+
+/* Shown when a filter matches nothing. */
+.conf-empty {
+  padding: var(--space-xl) 0;
+  text-align: center;
+  color: var(--c-muted);
+}
+
+
+
+/* ============================================================================
+   20b. OFFICERS
+   Banner uses a third, distinct idiom: thin diagonal rules drifting sideways.
+   Not the home hero's photographic entrance, not the conference dot-map.
+   ========================================================================= */
+
+/* --- Officer grid ------------------------------------------------------ */
+
+.officer-group + .officer-group { margin-top: var(--space-2xl); }
+
+.officer-group__title {
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--c-line);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  color: var(--c-text);
+}
+
+.officer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg) var(--space-md);
+}
+
+@media (max-width: 1000px) { .officer-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px)  { .officer-grid { grid-template-columns: 1fr; } }
+
+.officer {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: transform var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) ease,
+              box-shadow var(--dur-base) ease;
+}
+
+.officer:hover {
+  transform: translateY(-6px);
+  border-color: var(--c-accent);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.officer__portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-bottom: 1px solid var(--c-line);
+  background: linear-gradient(155deg, #16294F 0%, #101A33 55%, #0C111E 100%);
+}
+
+.officer__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Initials stand in until a real portrait exists. */
+.officer__initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(180, 202, 255, 0.55);
+}
+
+.officer__body { padding: var(--space-md); }
+
+.officer__name {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 var(--space-3xs);
+  padding-bottom: 5px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--c-text);
+}
+
+/* The underline sweeps in from the left on hover. */
+.officer__name::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.officer:hover .officer__name::after { transform: scaleX(1); }
+
+.officer__role {
+  display: block;
+  margin-bottom: var(--space-2xs);
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-accent-text);
+}
+
+.officer__grade {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: 0.8125rem;
+  color: var(--c-muted);
+}
+
+.officer__bio {
+  margin: 0;
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--c-muted);
+  max-width: none;
+}
+
+
+/* --- "Interested in leading?" band -------------------------------------- */
+
+.lead-band {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 3px;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+@media (max-width: 800px) {
+  .lead-band { grid-template-columns: 1fr; }
+}
+
+.lead-band__title {
+  margin: 0 0 var(--space-xs);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  color: var(--c-text);
+}
+
+.lead-band__body {
+  margin: 0;
+  color: var(--c-muted);
+  max-width: 58ch;
+}
+
+.lead-band__action { justify-self: start; }
+
+@media (min-width: 801px) { .lead-band__action { justify-self: end; } }
+
+
+/* ============================================================================
+   20c. PAGE TRANSITION
+   A dark panel wipes down over the page on internal navigation, then wipes
+   away on arrival. Sits above everything, including the skip link.
+
+   Default state is UNCOVERED. Every failure mode — JS error, bfcache restore,
+   slow network — leaves the page visible rather than stranded behind a black
+   rectangle.
+   ========================================================================= */
+
+.page-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: var(--c-bg);
+  transform: translateY(-100%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Leaving: wipe down over the content. */
+body.is-leaving .page-wipe {
+  transform: translateY(0);
+  transition: transform 250ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Arriving: start covered, then wipe down and off the bottom. */
+body.is-arriving .page-wipe { transform: translateY(0); }
+
+body.is-arriving-out .page-wipe {
+  transform: translateY(100%);
+  transition: transform 250ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+
+
+/* ============================================================================
+   21. REDUCED MOTION
+   Honour the OS setting: no transforms, no transitions, no smooth scroll.
+   main.js additionally skips the IntersectionObserver entirely.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .has-js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nav-overlay__link {
+    opacity: 1;
+    transform: none;
+  }
+}
