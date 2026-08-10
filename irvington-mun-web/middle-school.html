@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Middle School MUN — Irvington Model United Nations</title>
+  <meta name="description" content="Middle School Model UN at Irvington: an introduction to Model United Nations for middle school students of all ages. Introductory meetings run 3:30–4:30 PM in room 223, starting November 5.">
+
+  <!-- Social preview. og:url and og:image must be ABSOLUTE urls to work, so
+       replace the TBD host below with the real GitHub Pages address once the
+       repo exists — e.g. https://your-username.github.io/irvington-mun-web -->
+  <link rel="canonical" href="https://TBD.github.io/irvington-mun-web/middle-school.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Irvington Model United Nations">
+  <meta property="og:title" content="Middle School MUN — Irvington Model UN">
+  <meta property="og:description" content="An introduction to Model United Nations for middle school students of all ages. Introductory meetings run 3:30–4:30 PM in room 223, starting November 5.">
+  <meta property="og:url" content="https://TBD.github.io/irvington-mun-web/middle-school.html">
+  <meta property="og:image" content="https://TBD.github.io/irvington-mun-web/assets/indemun-2026.jpg">
+  <meta property="og:image:alt" content="The Irvington delegation gathered outside at a conference, several delegates holding award certificates and Best Delegate gavels.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Middle School MUN — Irvington Model UN">
+  <meta name="twitter:description" content="An introduction to Model United Nations for middle school students of all ages. Introductory meetings run 3:30–4:30 PM in room 223, starting November 5.">
+  <meta name="twitter:image" content="https://TBD.github.io/irvington-mun-web/assets/indemun-2026.jpg">
+  <meta name="theme-color" content="#0A0B0D">
+
+  <!-- Fonts: Instrument Serif (display) + Space Grotesk (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Instrument Serif ships in a single weight, so every display rule sits
+       at 400; asking for 500/600 would only trigger faux-bold synthesis. -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css?v=37">
+
+  <!-- Progressive-enhancement flag, set before paint so `.reveal` elements
+       start hidden without a flash of visible content. -->
+  <script>document.documentElement.classList.add('has-js');</script>
+  <script src="main.js?v=19" defer></script>
+</head>
+
+<!-- The banner is a full-bleed dark band, so the header floats over it. -->
+<body data-nav="overlay">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ======================== HEADER ======================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+
+      <a class="brand" href="index.html" aria-label="Irvington Model United Nations — home">
+        <span class="brand__mark">Irvington</span>
+        <span class="brand__rest" aria-hidden="true">Model United Nations</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__link" href="index.html">Home</a>
+        <a class="nav__link" href="about.html">About</a>
+        <a class="nav__link" href="conferences.html">Conferences</a>
+        <a class="nav__link" href="middle-school.html" aria-current="page">Middle&nbsp;School</a>
+        <a class="nav__link" href="officers.html">Officer&nbsp;Team</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" type="button"
+              aria-label="Open menu" aria-expanded="false" aria-controls="navOverlay">
+        <span class="nav-toggle__box" aria-hidden="true">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE MENU ==================== -->
+  <div class="nav-overlay" id="navOverlay" inert>
+    <div class="nav-overlay__head"></div>
+    <div class="nav-overlay__body">
+
+      <nav aria-label="Mobile">
+        <ul class="nav-overlay__list">
+          <li><a class="nav-overlay__link" href="index.html">Home</a></li>
+          <li><a class="nav-overlay__link" href="about.html">About</a></li>
+          <li><a class="nav-overlay__link" href="conferences.html">Conferences</a></li>
+          <li><a class="nav-overlay__link" href="middle-school.html" aria-current="page">Middle&nbsp;School&nbsp;MUN</a></li>
+          <li><a class="nav-overlay__link" href="officers.html">Officer&nbsp;Team</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-overlay__foot">
+        <a class="footer-social" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" focusable="false">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+            <circle cx="12" cy="12" r="4.2"/>
+            <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Instagram</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== MAIN ======================== -->
+  <main id="main">
+
+    <!-- ==================== PAGE BANNER ====================
+         The high school delegation outside a conference — what a middle
+         schooler is being invited to grow into. Same photo treatment as the
+         other interior banners; --banner-focus sets the crop. -->
+    <!-- Scrim runs above the 0.58 default: this is the brightest banner photo
+         on the site (open sky, sunlit concrete), and at 375px the headline
+         measured 4.53:1 against it — passing, but with no margin. 0.68 puts
+         every run clear of 6:1 without flattening the picture. -->
+    <section class="banner banner--photo" style="--banner-focus: center 42%; --banner-scrim: 0.68;">
+
+      <div class="banner__media">
+        <img src="assets/indemun-2026.jpg" width="1600" height="1200"
+             alt="The Irvington delegation gathered outside at a conference, several delegates holding award certificates and two holding Best Delegate gavels."
+             fetchpriority="high" decoding="async">
+      </div>
+
+      <div class="banner__veil" aria-hidden="true"></div>
+
+      <div class="banner__inner">
+        <div class="container">
+          <p class="eyebrow eyebrow--ruled reveal">For Middle Schoolers</p>
+          <h1 class="reveal" data-reveal-delay="90">Middle School MUN</h1>
+          <p class="lede reveal" data-reveal-delay="180">An introduction to Model United Nations, open to middle school students of every age and every level of experience.</p>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ==================== WHAT IT IS ==================== -->
+    <section class="section">
+      <div class="container">
+
+        <p class="eyebrow eyebrow--ruled reveal">The Programme</p>
+        <h2 class="reveal" data-reveal-delay="80">Start early, start from scratch.</h2>
+
+        <p class="reveal" data-reveal-delay="140">Model United Nations puts you in the seat of a country&rsquo;s diplomat. You are assigned a nation, almost never your own, and you argue its real positions in committee: researching what that government actually says, speaking in formal debate, building alliances with delegations that want what you want, and writing resolutions that can survive a vote.</p>
+        <p class="reveal" data-reveal-delay="200">Middle School MUN is where that begins. Sessions are run by Irvington&rsquo;s own delegates and officers, and they assume you know nothing about the UN yet &mdash; because most people who walk in don&rsquo;t. You will learn how a committee runs, how to speak without notes in front of a room, and how to hold an argument together while somebody is trying to take it apart.</p>
+        <p class="reveal" data-reveal-delay="260">There is no tryout and no experience requirement. Come to a meeting, sit in, and see whether it is for you.</p>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== THE DETAILS ====================
+         Static cards — no hover lift, because none of these are links. -->
+    <section class="section section--tight">
+      <div class="container feature-grid">
+
+        <div class="feature feature--static reveal">
+          <span class="feature__icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Who it is for">
+  <circle cx="9" cy="8.2" r="3.1"/>
+  <path d="M3.4 19.4a5.6 5.6 0 0 1 11.2 0"/>
+  <path d="M16.2 5.5a3.1 3.1 0 0 1 0 5.4"/>
+  <path d="M17.4 14.4a5.6 5.6 0 0 1 3.2 5"/>
+</svg></span>
+          <h3 class="feature__title">Who it&rsquo;s for</h3>
+          <p class="feature__body">Middle school students of all ages. No experience with Model UN, debate or public speaking is needed to join.</p>
+        </div>
+
+        <div class="feature feature--static reveal" data-reveal-delay="90">
+          <span class="feature__icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="When it meets">
+  <circle cx="12" cy="12" r="8.4"/>
+  <path d="M12 7.3V12l3.1 1.9"/>
+</svg></span>
+          <h3 class="feature__title">When it meets</h3>
+          <p class="feature__body">The introductory meeting runs <strong>3:30&ndash;4:30&nbsp;PM</strong>, starting <strong>November&nbsp;5</strong>, in room&nbsp;223 at Irvington High School.</p>
+        </div>
+
+        <div class="feature feature--static reveal" data-reveal-delay="180">
+          <span class="feature__icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Where it is held">
+  <path d="M12 21.2s6.4-5.3 6.4-10.2a6.4 6.4 0 1 0-12.8 0c0 4.9 6.4 10.2 6.4 10.2Z"/>
+  <circle cx="12" cy="10.7" r="2.4"/>
+</svg></span>
+          <h3 class="feature__title">Where it&rsquo;s held</h3>
+          <p class="feature__body">Norse Hall, at Irvington High School in Fremont. Introductory meetings are in room&nbsp;223.</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== REGISTER ==================== -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="lead-band reveal">
+
+          <div>
+            <h2 class="lead-band__title">Sign up for Middle School MUN</h2>
+            <p class="lead-band__body">Registration is open now. It takes a minute, and it is the only thing you need to do before the first meeting on November&nbsp;5.</p>
+          </div>
+
+          <div class="lead-band__action">
+            <a class="btn btn--primary" href="https://tinyurl.com/bdhdcrtx" target="_blank" rel="noopener noreferrer">Register now</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== QUESTIONS ==================== -->
+    <section class="section section--tight">
+      <div class="container">
+        <p class="muted reveal">Questions from parents or students are welcome at
+          <a href="mailto:mun.irvington@gmail.com?subject=Middle%20School%20MUN">mun.irvington@gmail.com</a>.
+          The programme is run by our <a href="officers.html">Middle School MUN leaders</a>, and our advisor is Mr.&nbsp;Belmonte.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <div class="footer-rule" aria-hidden="true"></div>
+          <p class="footer-brand">Irvington Model<br>United Nations</p>
+          <p class="footer-tagline">Made for development, leadership and public speaking.</p>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Quick Links</h2>
+          <ul class="footer-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="conferences.html">Conferences</a></li>
+            <li><a href="middle-school.html">Middle School MUN</a></li>
+            <li><a href="officers.html">Officer Team</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Contact</h2>
+          <ul class="footer-list">
+            <li>
+              <span class="footer-list__label">Email</span>
+              <a href="mailto:mun.irvington@gmail.com">mun.irvington@gmail.com</a>
+            </li>
+            <li>
+              <span class="footer-list__label">Club Meetings</span>
+              <span>Mondays at lunch &mdash; room 223</span>
+            </li>
+            <li>
+              <span class="footer-list__label">Travel Team</span>
+              <span>Mondays after school &mdash; room 223</span>
+            </li>
+            <li>
+              <span class="footer-list__label">Advisor</span>
+              <span>Mr.&nbsp;Belmonte</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Follow</h2>
+          <a class="footer-social" href="https://www.instagram.com/irvingtonmun/" target="_blank" rel="noopener noreferrer">
+            <svg class="footer-social__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/>
+              <circle cx="12" cy="12" r="4.2"/>
+              <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom__inner">
+        <p>&copy; <span id="year">2026</span> Irvington Model United Nations. All rights reserved.</p>
+        <p>Irvington High School &middot; Fremont, CA</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
